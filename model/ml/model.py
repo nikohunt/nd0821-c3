@@ -1,7 +1,8 @@
+from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 
 
-# Optional: implement hyperparameter tuning.
+# TODO: implement hyperparameter tuning.
 def train_model(X_train, y_train):
     """
     Trains a machine learning model and returns it.
@@ -17,13 +18,15 @@ def train_model(X_train, y_train):
     model
         Trained machine learning model.
     """
-
-    pass
+    sgd_clf = SGDClassifier(random_state=42)
+    sgd_clf.fit(X_train, y_train)
+    return sgd_clf
 
 
 def compute_model_metrics(y, preds):
     """
-    Validates the trained machine learning model using precision, recall, and F1.
+    Validates the trained machine learning model using precision, recall, and
+    F1.
 
     Inputs
     ------
@@ -44,7 +47,7 @@ def compute_model_metrics(y, preds):
 
 
 def inference(model, X):
-    """ Run model inferences and return the predictions.
+    """Run model inferences and return the predictions.
 
     Inputs
     ------
