@@ -54,3 +54,16 @@ def test_race_names(data):
     ]
     print(data.race.values)
     assert set(known_race_names).issuperset(set(data["race"].values))
+
+
+def test_column_ranges(data):
+
+    ranges = {
+        "age": (17, 90),
+        "education-num": (1, 16),
+        "hours-per-week": (1, 99),
+    }
+
+    for col_name, (minimum, maximum) in ranges.items():
+        assert data[col_name].min() >= minimum
+        assert data[col_name].max() <= maximum
