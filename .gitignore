@@ -1,2 +1,4 @@
 eda/.ipynb_checkpoints/EDA-checkpoint.ipynb
 .pytest_cache
+tests/__pycache__/*
+model/__pycache__/*
