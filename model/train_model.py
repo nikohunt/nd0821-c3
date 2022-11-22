@@ -70,9 +70,10 @@ def go():
     logging.info(f"INFO      Fbeta: {fbeta:.2f}")
     logging.info("SUCCESS   Model metrics")
 
-    # Save model
+    # Save model and encoder
     pickle.dump(model, open("model/models/model.pkl", "wb"))
-    logging.info("SUCCESS   Model saved")
+    pickle.dump(encoder, open("model/encoders/encoder.pkl", "wb"))
+    logging.info("SUCCESS   Model and encoder saved")
 
 
 if __name__ == "__main__":
