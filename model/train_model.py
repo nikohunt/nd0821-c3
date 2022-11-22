@@ -4,6 +4,7 @@ import logging
 import pickle
 
 import pandas as pd
+import slices
 from ml.data import process_data
 from ml.model import compute_model_metrics, inference, train_model
 from sklearn.model_selection import train_test_split
@@ -40,7 +41,6 @@ def go():
     )
 
     # Process the test data with the process_data function.
-    logging.info("INFO      Ingesting data")
     X_test, y_test, encoder, lb = process_data(
         test,
         categorical_features=cat_features,
@@ -70,6 +70,23 @@ def go():
     pickle.dump(encoder, open("model/encoders/encoder.pkl", "wb"))
     logging.info("SUCCESS   Model and encoder saved")
 
+    # Category slicing
+
+    # X_test_filtered = X_test[X_test["race"] == "White"]
+    # xlen = X_test_filtered.shape[0]
+    # y_test_filtered = y_test.iloc[X_test_filtered.values]
+    # ylen = y_test_filtered.shape[0]
+    # logging.info(f"X is {xlen}")
+    # logging.info(f"ylen is {ylen}")
+    # # slice_preds =
+    return test, model, cat_features, encoder, lb
+
 
 if __name__ == "__main__":
-    go()
+    # Takes data, processes it, trains the model, and saves it and the encoders
+    test, model, cat_features, encoder, lb = go()
+
+    # Use outputs to analyse model slices
+    slices.category_slice(
+        test, model, cat_features, encoder, lb, features=["education"]
+    )
