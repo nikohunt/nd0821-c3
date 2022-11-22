@@ -4,7 +4,7 @@ from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
 
 def process_data(
     X,
-    categorical_features=None,
+    categorical_features=[],
     label=None,
     training=True,
     encoder=None,
@@ -51,8 +51,6 @@ def process_data(
         binarizer passed in.
     """
 
-    if categorical_features is None:
-        categorical_features = []
     if label is not None:
         y = X[label]
         X = X.drop([label], axis=1)
