@@ -4,10 +4,10 @@ import logging
 import pickle
 
 import pandas as pd
-import slices
 from ml.data import process_data
 from ml.model import compute_model_metrics, inference, train_model
 from sklearn.model_selection import train_test_split
+from slices import slicer
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
 logger = logging.getLogger()
@@ -78,6 +78,6 @@ if __name__ == "__main__":
     test, model, cat_features, encoder, lb = go()
 
     # Use outputs to analyse model slices
-    slices.category_slice(
+    slicer.category_slice(
         test, model, cat_features, encoder, lb, features=["education"]
     )
