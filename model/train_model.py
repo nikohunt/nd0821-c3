@@ -70,15 +70,6 @@ def go():
     pickle.dump(encoder, open("model/encoders/encoder.pkl", "wb"))
     logging.info("SUCCESS   Model and encoder saved")
 
-    # Category slicing
-
-    # X_test_filtered = X_test[X_test["race"] == "White"]
-    # xlen = X_test_filtered.shape[0]
-    # y_test_filtered = y_test.iloc[X_test_filtered.values]
-    # ylen = y_test_filtered.shape[0]
-    # logging.info(f"X is {xlen}")
-    # logging.info(f"ylen is {ylen}")
-    # # slice_preds =
     return test, model, cat_features, encoder, lb
 
 
