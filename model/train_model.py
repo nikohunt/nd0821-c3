@@ -15,13 +15,8 @@ logger = logging.getLogger()
 def go():
     # Ingest data
     logging.info("INFO      Ingesting data")
-    data = pd.read_csv("data/census.csv")
+    data = pd.read_csv("data/census.csv", skipinitialspace=True)
     logging.info("SUCCESS   Data ingested")
-
-    # Fix dirty columns
-    logging.info("INFO      Cleaning data")
-    data.columns = data.columns.str.replace(" ", "")
-    logging.info("SUCCESS   Data cleaned")
 
     # Test train split
     logging.info("INFO      Making test train split")
