@@ -17,12 +17,14 @@ def go():
     # Ingest data
     logging.info("INFO      Ingesting data")
     data = pd.read_csv("data/census.csv", skipinitialspace=True)
-    logging.info("SUCCESS   Data ingested")
+    logging.info(f"SUCCESS   {data.shape} shape DataFrame created")
 
     # Test train split
     logging.info("INFO      Making test train split")
     train, test = train_test_split(data, test_size=0.20, random_state=42)
     logging.info("SUCCESS   Data split")
+    logging.info(f"INFO      {train.shape[0]} rows in train")
+    logging.info(f"INFO      {test.shape[0]} rows in test")
 
     cat_features = [
         "workclass",
@@ -57,13 +59,11 @@ def go():
     logging.info("SUCCESS   Model trained")
 
     # Compute metrics
-    logging.info("INFO      Computing model metrics")
     preds = inference(model, X_test)
     precision, recall, fbeta = compute_model_metrics(y_test, preds)
     logging.info(f"INFO      Precision: {precision:.2f}")
     logging.info(f"INFO      Recall: {recall:.2f}")
     logging.info(f"INFO      Fbeta: {fbeta:.2f}")
-    logging.info("SUCCESS   Model metrics")
 
     # Save model and encoder
     pickle.dump(model, open("model/models/model.pkl", "wb"))
@@ -79,5 +79,5 @@ if __name__ == "__main__":
 
     # Use outputs to analyse model slices
     slicer.category_slice(
-        test, model, cat_features, encoder, lb, features=["education"]
+        test, model, cat_features, encoder, lb, features=cat_features
     )
