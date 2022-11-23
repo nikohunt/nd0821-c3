@@ -12,6 +12,13 @@ from pydantic import BaseModel, Field
 app = FastAPI()
 
 
+# Use of hyphenated feature names in the Respondent class definition below
+# results in `SyntaxError: illegal target for annotation`. We use a function
+# defined here, later added to the class
+def to_hyphen(string: str) -> str:
+    return string.replace("-", "_")
+
+
 # Declare example of data inference artifact is expecting using pydantic
 class Respondent(BaseModel):
     age: int = Field(example=40)
@@ -29,6 +36,9 @@ class Respondent(BaseModel):
     hours_per_week: int = Field(example=35)
     native_country: str = Field(example="United-States")
     salary: int = Field(example=">50k")
+
+    class Config:
+        alias_generator = to_hyphen
 
 
 # Declare api response expectation
