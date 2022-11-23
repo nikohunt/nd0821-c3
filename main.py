@@ -43,7 +43,6 @@ class Respondent(BaseModel):
     capital_loss: int = Field(example=1000)
     hours_per_week: int = Field(example=35)
     native_country: str = Field(example="United-States")
-    salary: str = Field(example=">50k")
 
     class Config:
         alias_generator = to_hyphen
@@ -54,7 +53,7 @@ class Response(Respondent):
     prediction: bool
 
 
-# Load model
+# Load model and encoders
 clf = pickle.load(open("model/models/model.pkl", "rb"))
 
 
