@@ -55,6 +55,7 @@ class Response(Respondent):
 
 # Load model and encoders
 clf = pickle.load(open("model/models/model.pkl", "rb"))
+encoder = pickle.load(open("model/encoders/encoder.pkl", "rb"))
 
 
 def pydantic_model_to_df(model_instance: Respondent) -> pd.DataFrame:
@@ -79,6 +80,9 @@ async def welcome():
 async def predict(respondent: Respondent):
     # Convert body to pandas
     df_instance = pydantic_model_to_df(respondent)
+
+    # Encoder for categorical features
+    encoder.transform(df_instance)
 
     # Run inference
     prediction = clf.predict(df_instance).tolist()[0]
