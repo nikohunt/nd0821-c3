@@ -4,6 +4,7 @@ model call for post requests at the /predict endpoint
 """
 import pickle
 
+import numpy as np
 import pandas as pd
 from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
@@ -36,7 +37,7 @@ class Respondent(BaseModel):
     education_num: int = Field(example=10)
     marital_status: str = Field(example="Married-civ-spouse")
     occupation: str = Field(example="Craft-repair")
-    relatonship: str = Field(example="Own-child")
+    relationship: str = Field(example="Own-child")
     race: str = Field(example="Black")
     sex: str = Field(example="Female")
     capital_gain: int = Field(example=50)
@@ -50,7 +51,7 @@ class Respondent(BaseModel):
 
 # Declare api response expectation
 class Response(Respondent):
-    prediction: bool
+    prediction: int = Field(example=1)
 
 
 # Load model and encoders
@@ -60,7 +61,7 @@ encoder = pickle.load(open("model/encoders/encoder.pkl", "rb"))
 
 def pydantic_model_to_df(model_instance: Respondent) -> pd.DataFrame:
     """Converts pydantic model instance into a Pandas DataFrame which is
-    expected by the model
+    expected by the model, and performs intermediary feature engineering steps
 
     Args:
         model_instance (Respondent): Pydantic class inherited from BaseModel
@@ -68,7 +69,31 @@ def pydantic_model_to_df(model_instance: Respondent) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Pandas DataFrame ready for inference
     """
-    return pd.DataFrame([jsonable_encoder(model_instance)])
+
+    X = pd.DataFrame([jsonable_encoder(model_instance)])
+
+    categorical_features = [
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "race",
+        "sex",
+        "native-country",
+    ]
+
+    # Create two dataframes for categorical and numeric features
+    X_categorical = X[categorical_features].values
+    X_continuous = X.drop(*[categorical_features], axis=1)
+
+    # Encoder for categorical features
+    X_categorical = encoder.transform(X_categorical)
+
+    # Put the dataframes back together again and return
+    X = np.concatenate([X_continuous, X_categorical], axis=1)
+
+    return X
 
 
 @app.get("/")
@@ -81,13 +106,10 @@ async def predict(respondent: Respondent):
     # Convert body to pandas
     df_instance = pydantic_model_to_df(respondent)
 
-    # Encoder for categorical features
-    encoder.transform(df_instance)
-
     # Run inference
     prediction = clf.predict(df_instance).tolist()[0]
 
     # Construct api response
     response = respondent.dict(by_alias=True)
-    response.update({"Predictions": prediction})
+    response.update({"prediction": prediction})
     return response
