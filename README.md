@@ -8,33 +8,33 @@ This project trains that model and checks the performance of the data on slices 
 
 The model has an api via FastAPI for inference, and the project includes code for deployment to Heroku, although [Heroku free product plans are to be removed November 28th, 2022](https://help.heroku.com/RSBRUH58/removal-of-heroku-free-product-plans-faq), at which point this code would require a paid account to function correctly.
 
-Project execution, links, and contribution guidance are all included below.
-
 Working in a command line environment is recommended for ease of use with git and dvc. If on Windows, WSL1 or 2 is recommended.
 
-## Environment Set up
+## Environment
 
 - Download and install conda if you don’t have it already.
-  - Use the supplied `requirements` file to create a new environment, or
-  - `conda create -n [envname] "python=3.8" scikit-learn dvc pandas numpy pytest jupyter jupyterlab fastapi uvicorn -c conda-forge`
-- Install git either through conda (`conda install git`) or through your CLI, e.g. `sudo apt-get git`.
+- Create a conda environment based on the yaml found in envs.
+  `conda env create --file=envs/build.yaml`
 
-## Set up S3
+## Tests
 
-- In your CLI environment install the<a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html" target="_blank"> AWS CLI tool</a>.
-- In the navigation bar in the Udacity classroom select **Open AWS Gateway** and then click **Open AWS Console**. You will not need the AWS Access Key ID or Secret Access Key provided here.
-- From the Services drop down select S3 and then click Create bucket.
-- Give your bucket a name, the rest of the options can remain at their default.
+- Tests for machine learning can be found in `tests/test_model.py`.
+- Tests for FastAPI implementation can be found in `test_api.py`.
+- Both of these can be run with `pytest -v` in the command line.
 
-To use your new S3 bucket from the AWS CLI you will need to create an IAM user with the appropriate permissions. The full instructions can be found <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html#id_users_create_console" target="_blank">here</a>, what follows is a paraphrasing:
+## Continuous Integration
 
-- Sign in to the IAM console <a href="https://console.aws.amazon.com/iam/" target="_blank">here</a> or from the Services drop down on the upper navigation bar.
-- In the left navigation bar select **Users**, then choose **Add user**.
-- Give the user a name and select **Programmatic access**.
-- In the permissions selector, search for S3 and give it **AmazonS3FullAccess**
-- Tags are optional and can be skipped.
-- After reviewing your choices, click create user.
-- Configure your AWS CLI to use the Access key ID and Secret Access key.
+- This is handled by GitHub Actions, the workflow being in the project under `.github`
+- The action uses `flake8` to lint and runs the test scripts detailed in the Tests section above.
+
+## Continuous Delivery
+
+- CD is handled by Heroku and is triggered by pushes to the main branch.
+
+## API Demo
+
+- In the `tests` folder, you can find the `api_demo.py` file, which can be executed on the command line to demonstrate the api in action.
+
 
 ## GitHub Actions
 
