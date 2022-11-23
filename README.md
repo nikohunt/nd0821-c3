@@ -1,4 +1,10 @@
+#### [Project nd00821-c3](https://github.com/nikohunt/nd0821-c3)
+
 # Deploying a Machine Learning Model on Heroku with FastAPI
+
+##### Nikolas Hunt
+
+[✉️](mailto:nikolashunt@protonmail.ch) | November 2022
 
 ## Introduction
 
