@@ -71,7 +71,7 @@ def test_post_predict_success(fake_positive_respondent):
 
 
 def test_post_predict_postive_content(fake_positive_respondent):
-    """Tests that the post endpoint returns a success code upon POST"""
+    """Tests that the post endpoint returns expected positive outcome"""
     r = client.post(
         "/predict/",
         json=fake_positive_respondent,
@@ -81,7 +81,7 @@ def test_post_predict_postive_content(fake_positive_respondent):
 
 
 def test_post_predict_negative_content(fake_negative_respondent):
-    """Tests that the post endpoint returns a success code upon POST"""
+    """Tests that the post endpoint returns expected negative outcome"""
     r = client.post(
         "/predict/",
         json=fake_negative_respondent,
